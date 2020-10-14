@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "751105283085",
+    "firebase_url": "https://madero-reservas.firebaseio.com",
+    "project_id": "madero-reservas",
+    "storage_bucket": "madero-reservas.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:751105283085:android:7658c08a0ce6740f34f144",
+        "android_client_info": {
+          "package_name": "com.gabriely.madero_reservas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "751105283085-valv77aq6q4r883qnnpmhbro0n9mump5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJBO_OxtBdyA7aIfGrzOedRlinlowQ1UE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "751105283085-valv77aq6q4r883qnnpmhbro0n9mump5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
