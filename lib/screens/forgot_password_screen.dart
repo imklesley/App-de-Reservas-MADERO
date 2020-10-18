@@ -10,7 +10,6 @@ class ForgotPasswordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Scaffold(
       key: _scaffoldKey,
       body: SingleChildScrollView(
@@ -18,7 +17,6 @@ class ForgotPasswordScreen extends StatelessWidget {
           children: [
             Container(
                 color: Colors.white,
-                height: size.height,
                 child: ScopedModelDescendant<UserModel>(
                   builder: (context, child, model) {
                     if (model.isLoading == true) {

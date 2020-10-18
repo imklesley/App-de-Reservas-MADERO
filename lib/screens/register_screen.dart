@@ -58,7 +58,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Scaffold(
       key: _scaffoldKey,
       body: SingleChildScrollView(
@@ -66,7 +65,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
           children: [
             Container(
               color: Colors.white,
-              height: size.height,
               child: ScopedModelDescendant<UserModel>(
                 builder: (contex, child, model) {
                   if (model.isLoading == true) {

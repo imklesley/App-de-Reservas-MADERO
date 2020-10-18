@@ -75,8 +75,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    //Para saber as dimensões da tela atual
-    Size size = MediaQuery.of(context).size;
     return Scaffold(
       resizeToAvoidBottomInset: true,
       //Passo a key que vai chamar os snakcs
@@ -87,7 +85,6 @@ class _LoginScreenState extends State<LoginScreen> {
             //todo fundo branco da tela
             Container(
               color: Colors.white,
-              // height: size.height,
               child: ScopedModelDescendant<UserModel>(
                 builder: (context, child, model) {
                   if (model.isLoading == true) {
