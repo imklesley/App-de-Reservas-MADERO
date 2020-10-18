@@ -17,12 +17,17 @@ class AboutUsScreen extends StatelessWidget {
         backgroundColor: Color(0xFFD9611E),
       ),
       backgroundColor: Colors.white,
+
+      //Construtor de futuro, irá buscar os dados no firebase e construir da maneira que desejar
       body: FutureBuilder<DocumentSnapshot>(
+          //futuro a ser construido
           future: FirebaseFirestore.instance
               .collection('general')
               .doc('about_us')
               .get(),
+          //Construtor do futuro, pega os dados da imagem e retorna algum widget
           builder: (context, snapshot) {
+            //Ainda não possui dados?
             if (!snapshot.hasData)
               return Center(
                 child: CircularProgressIndicator(
@@ -31,8 +36,10 @@ class AboutUsScreen extends StatelessWidget {
                 ),
               );
             else {
-              List<Widget> article = [];
-              for (var element in snapshot.data.data()['text']) {
+              // Caso já possua os dados
+
+              List<Widget> article = [];//Vai guardar os elementos já construidos de cada tela.
+              for (var element in snapshot.data['text']) {
                 if (element['type'] == 'image') {
                   article.add(FadeInImage.memoryNetwork(
                     placeholder: kTransparentImage,

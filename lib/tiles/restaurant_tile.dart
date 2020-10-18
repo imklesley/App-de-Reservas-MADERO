@@ -4,6 +4,7 @@ import 'package:madero_reservas/screens/restaurant_screen.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class RestaurantTile extends StatelessWidget {
+  //Inicializo a classe com o documento que possui todas as informações necessárias para a construção da tile desse restaurante
   final DocumentSnapshot restaurantData;
 
   RestaurantTile(this.restaurantData);
@@ -12,14 +13,20 @@ class RestaurantTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       child: Card(
+        //Widget que cria um card com uma determinada elevação
         shape: RoundedRectangleBorder(
+            //Coloca-se a borda no card de 12 pixel em todas as bordas
             borderRadius: BorderRadius.all(Radius.circular(12))),
         child: ClipRRect(
+            //Para fazer a nossa imagem tbm ficar com bordas arredondadas
             borderRadius: BorderRadius.all(Radius.circular(12)),
             child: Stack(
               children: [
                 Hero(
+                  //Animação mais simples do flutter
                   tag: restaurantData.id,
+                  //Passo um identificador, quando o flutter
+                  // perceber que mudamos de página e nessa outra página tbm possuir um widget do tipo Hero com a msm tag ele automaticamente irá realizar esse efeito
                   child: FadeInImage.memoryNetwork(
                       placeholder: kTransparentImage,
                       image: restaurantData['image'],
@@ -47,7 +54,7 @@ class RestaurantTile extends StatelessWidget {
                                       fontSize: 25,
                                       fontWeight: FontWeight.w200),
                                 ),
-                                Row(
+                                Row(//Constrói as estrelinhas de avaliação
                                   children: [
                                     Icon(
                                       Icons.star,
@@ -79,6 +86,8 @@ class RestaurantTile extends StatelessWidget {
             )),
       ),
       onTap: () {
+        //Navego empilhando a próxima tela e passo o documento que representa
+        // o restaurante e lá vamos conseguir construir a tela do restaurante. Nessa tela será usado todas as informações do restaurante
         Navigator.push(
             context,
             MaterialPageRoute(

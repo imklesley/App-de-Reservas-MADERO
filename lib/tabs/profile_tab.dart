@@ -9,9 +9,7 @@ class ProfileTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScopedModelDescendant<UserModel>(
       builder: (context, child, model) {
-        // if (model.isLoggedIn() == true && model.userData == null)
-        //   model.getUserData();
-
+        //Usei ListView para agrupar widget e manter a possibilidade de usar o scroll caso precise
         return ListView(
           children: [
             SizedBox(
@@ -36,22 +34,18 @@ class ProfileTab extends StatelessWidget {
                     SizedBox(
                       height: 10,
                     ),
-                    model.isLoggedIn() ?? ''
-                        ? Text(
-                            model.userData['name'] ?? '',
+                    model.isLoggedIn()
+                        ? // condicional ? faz algo : faz outra coisa
+                        Text(
+                            model.userData['name'],
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: 18,
                             ),
                           )
                         : FlatButton(
+                            //Tira espaço lateral do botão
                             padding: EdgeInsets.zero,
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => LoginScreen()));
-                            },
                             child: Text(
                               'Entrar ou cadastrar-se',
                               style: TextStyle(
@@ -59,12 +53,22 @@ class ProfileTab extends StatelessWidget {
                                 color: Colors.black,
                                 fontSize: 18,
                               ),
-                            )),
+                            ),
+                            onPressed: () {
+                              //Navega para outra tela através de empilhamento da nova tela
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => LoginScreen()));
+                            },
+                          ),
                     SizedBox(
                       height: 70,
                     ),
                     Column(
+                      //Altera o alinhamento do widget na tela
                         mainAxisAlignment: MainAxisAlignment.start,
+                        //Altera o alinhamento do widget na tela
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Container(

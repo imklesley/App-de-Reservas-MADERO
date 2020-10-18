@@ -12,20 +12,31 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  //permite verificar se os campos já estão validados
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  //Controladores de cada campo
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+
+
+  //visibilidade da senha
   bool _visible = true;
+  //estado inicial do olho da senha
   FaIcon _iconEye = FaIcon(FontAwesomeIcons.eye);
 
+
+  //Usei para exibir os snackbar de erro e sucesso
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   //Caso o cadastro ocorra bem
   VoidCallback onSucess() {
+    //Instaciei uma snackbar
     SnackBar snackBar = SnackBar(
       content: Text('Login realizado com sucesso'),
       backgroundColor: Colors.green,
       duration: Duration(seconds: 3),
+      //formato arredondado da snackbar
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(
           Radius.circular(12.0),
@@ -33,14 +44,21 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
 
+
+    //uso a chave "_scaffoldKey" que criei e coloquei dentro do scaffold para exibir na minha tela
     _scaffoldKey.currentState.showSnackBar(snackBar);
+
+    //Essa função permite fazer o app "dormir" por alguns instantes
     Future.delayed(Duration(seconds: 1)).then((value) {
-      Navigator.pop(context, (route) => route.isFirst);
+      Navigator.pop(context);
     });
+
+
   }
 
   //Caso ocorra algum erro no cadastro
   VoidCallback onFail() {
+    //Instaciei uma snackbar
     SnackBar snackBar = SnackBar(
       content: Text('Usuário não existe ou senha inválida'),
       backgroundColor: Colors.red,
@@ -57,12 +75,15 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //Para saber as dimensões da tela atual
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      //Passo a key que vai chamar os snakcs
       key: _scaffoldKey,
-      body: SingleChildScrollView(
+      body: SingleChildScrollView(//permite "scrollar"
         child: Stack(
           children: [
+            //todo fundo branco da tela
             Container(
               color: Colors.white,
               height: size.height,
@@ -70,14 +91,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 builder: (context, child, model) {
                   if (model.isLoading == true) {
                     return Center(
-                      child: CircularProgressIndicator(
+                      child: CircularProgressIndicator(//Circulo no centro da tela-- representa que está carregando
                         backgroundColor: Colors.black,
                         valueColor:
-                            AlwaysStoppedAnimation<Color>(Color(0xFFD9611E)),
+                            AlwaysStoppedAnimation<Color>(Color(0xFFD9611E)),//Cor laranja que roda dentro do circulo
                       ),
                     );
                   }
 
+                  //Caso o model.isLoading != true
                   return Form(
                     key: _formKey,
                     child: Material(
@@ -126,7 +148,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             TextFormField(
                               controller: _passwordController,
                               obscureText: _visible,
-                              keyboardType: TextInputType.emailAddress,
+                              keyboardType: TextInputType.text,
                               decoration: InputDecoration(
                                   labelText: 'Senha',
                                   labelStyle: TextStyle(
@@ -224,6 +246,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       )),
                                     ),
                                     onPressed: () {
+                                      //Verifica-se o estado dos validadores
                                       if (_formKey.currentState.validate()) {
                                         UserModel.of(context).signIn(
                                             email: _emailController.text,
@@ -262,6 +285,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 },
               ),
             ),
+
+            //Como queremos que a parte laranjada fique no top, o widget precisa ser inserido depois
             Container(
               height: 240,
               decoration: BoxDecoration(

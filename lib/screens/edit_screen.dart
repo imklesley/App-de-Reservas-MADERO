@@ -4,33 +4,43 @@ import 'package:madero_reservas/models/user_model.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class EditScreen extends StatefulWidget {
+  //Inicializa a classe com os dados da reserva
   final DocumentSnapshot bookingData;
-
   EditScreen(this.bookingData);
 
   @override
-  _EditScreenState createState() => _EditScreenState(this.bookingData);
+  _EditScreenState createState() => _EditScreenState(bookingData);
 }
 
 class _EditScreenState extends State<EditScreen> {
+  //Inicializa a classe com os dados da reserva
   final DocumentSnapshot bookingData;
-
   _EditScreenState(this.bookingData);
 
+
+  //variáveis que vai conter as novas informações da reserva
   DateTime dateReservation = null;
   TimeOfDay timeReservation = null;
 
+
+
   @override
   Widget build(BuildContext context) {
+
     showAlertDialog(BuildContext context) {
+      //Criei Um botão para o 'sim'
       Widget yesButton = FlatButton(
         child: Text("Sim"),
         onPressed: () {
+          //quando o botão sim for pressionado chamos o método que deleta no firebase e no app a reserva
+          //Usa-se forma de acesso ao UserModel que é simplificado
           UserModel.of(context)
               .deleteBook(bookingData.id, bookingData['restaurant_id']);
+          //Desempilhar as telas até o inicio
           Navigator.popUntil(context, (route) => route.isFirst);
         },
       );
+      //Criei Um botão para o 'não'
       Widget noButton = FlatButton(
         child: Text("Não"),
         onPressed: () {
@@ -44,7 +54,9 @@ class _EditScreenState extends State<EditScreen> {
         content: Text('Você confirma o cancelamento da sua reserva?'),
         actions: [yesButton, noButton],
       );
-      // show the dialog
+
+
+      // Exibe AlertDialog
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -53,12 +65,16 @@ class _EditScreenState extends State<EditScreen> {
       );
     }
 
+    //Pega o timestamp que está no firebase dentro de date_time_reservation
     Timestamp timestampFirebase = bookingData['date_time_reservation'];
+    //Converto o timestamp para data e horario(DateTime)
     DateTime dateTime = timestampFirebase.toDate();
 
+    //Essa key serve somente para exibir os snackbars de erro, quando o usuário não inseriu nada ou só inseriu uma das informações
     GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
     //Pickers
+    //Picker de data
     void pickDate() async {
       DateTime dateSelected = await showDatePicker(
         context: context,
@@ -72,7 +88,7 @@ class _EditScreenState extends State<EditScreen> {
         dateReservation = dateSelected;
       });
     }
-
+    //Picker de horário
     void pickTime() async {
       TimeOfDay timeSelected =
           await showTimePicker(context: context, initialTime: TimeOfDay.now());
@@ -82,6 +98,8 @@ class _EditScreenState extends State<EditScreen> {
       });
     }
 
+
+    //Construção da nossa tela
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
@@ -127,6 +145,7 @@ class _EditScreenState extends State<EditScreen> {
                   SizedBox(
                     height: 40,
                   ),
+                  //Tile que chma a data
                   ListTile(
                     contentPadding: EdgeInsets.zero,
                     title: Text(
@@ -152,6 +171,7 @@ class _EditScreenState extends State<EditScreen> {
                       pickDate();
                     },
                   ),
+                  //Tile que chma o horário
                   ListTile(
                     contentPadding: EdgeInsets.zero,
                     title: Text(
@@ -216,15 +236,17 @@ class _EditScreenState extends State<EditScreen> {
                                   'status': finished,
                                   'restaurant_id': bookingData['restaurant_id'],
                                   'restaurant_name':
-                                      bookingData['restaurant_name'],
+                                  bookingData['restaurant_name'],
                                   'user_id': bookingData['user_id'],
                                   'user_name': bookingData['user_name'],
                                   'date_time_reservation': dateTimeReservation,
                                 };
+
+
                                 //Salva alterações no firebase
                                 await UserModel.of(context).updateBooking(
                                     reservationData, bookingData.id);
-
+                                //Volta para tela de reservas
                                 Navigator.pop(context);
                               } else {
                                 SnackBar snackBar = SnackBar(

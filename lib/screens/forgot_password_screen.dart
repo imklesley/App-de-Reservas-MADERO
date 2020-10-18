@@ -118,8 +118,11 @@ class ForgotPasswordScreen extends StatelessWidget {
                                               ),
                                             ),
                                           );
+
+
                                           UserModel.of(context).recoverPassword(
                                               email: _emailController.text);
+
                                           _scaffoldKey.currentState
                                               .showSnackBar(snackBar);
                                           Future.delayed(Duration(seconds: 3))

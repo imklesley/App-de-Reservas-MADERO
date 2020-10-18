@@ -1,12 +1,16 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
 import 'package:madero_reservas/models/user_model.dart';
 import 'package:madero_reservas/screens/home_screen.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:flutter/material.dart';
+
 
 void main() async {
+  //Realizamos a inicializção da conexão do app com o firebase
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
+  //Inicia a aplicação
   runApp(MyApp());
 }
 
@@ -30,3 +34,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+
+

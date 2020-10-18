@@ -28,16 +28,26 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.0
+  #BottomNavigator
   circle_bottom_navigation: ^1.0.6
+  #Coloca de forma facilitada o nome no app
   flutter_launcher_name: ^0.0.1
+  #Coloca de forma facilitada um icone no app
   flutter_launcher_icons: ^0.8.1
+  #Um repositório com varios icones
   font_awesome_flutter: ^8.9.0
+  #---Conexões Firebase---
+  #Faz a conexão com o firebase
   firebase_core: ^0.5.0+1
+  #Para realizar operações no cloudfirestore
   cloud_firestore: ^0.14.1+3
+  #Para realizar toda parte de autenticação no firebase - login, cadastro, recuperação..
   firebase_auth: ^0.18.1+2
-  firebase_storage: ^4.0.1
+  #Serve como placeholder para realizar o fadein
   transparent_image: ^1.0.0
+  #Serve para criar modelos que conterão estados da aplicação. Ex.: Informações do usuário.
   scoped_model: ^1.0.1
+  #Serve para abrir links. Usado no app para abrir o mapa do google.
   url_launcher: ^5.7.2
 
 
@@ -50,7 +60,7 @@ flutter_launcher_name:
 
 
 flutter_icons:
-  android: TRUE
+  android: true
   ios: true
   image_path: "assets/images/icon_launcher/brand.png"
 

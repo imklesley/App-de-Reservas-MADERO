@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
+  import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ConfirmationScreen extends StatelessWidget {
+  //Inicializo a classe com o nome do restaurante
   final String restaraurantName;
 
   ConfirmationScreen(this.restaraurantName);
@@ -53,7 +54,7 @@ class ConfirmationScreen extends StatelessWidget {
                       child: Text('Ir para início',
                           style: TextStyle(color: Colors.white, fontSize: 22)),
                       onPressed: () {
-                        Navigator.popUntil(context, (route) => route.isFirst);
+                        Navigator.pop(context);
                       }),
                 )
               ],

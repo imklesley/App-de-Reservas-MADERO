@@ -11,6 +11,8 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  //Controlador do campo nome
   TextEditingController _nameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
@@ -22,7 +24,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   VoidCallback onSucess() {
     SnackBar snackBar = SnackBar(
       content:
-          Text('${_nameController.text.split(' ')[0]} Cadastrado Com Sucesso.'),
+          Text('Cadastrado Com Sucesso.'),
       backgroundColor: Colors.green,
       duration: Duration(seconds: 3),
       shape: RoundedRectangleBorder(

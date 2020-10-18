@@ -3,9 +3,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
+/*Isso é um modelo que vai guardar todos os estados usados e métodos que o usuário utilizou(Authentication(Login,recuperação..), CRUD(Finalizar reservas, atualizar deletar)) no aplicativo*/
+
 class UserModel extends Model {
   //Firebase user, guarda o usuário quando está logado
   User user;
+
+  //Realiza todas as operações de autenticação no Firebase
   FirebaseAuth _auth = FirebaseAuth.instance;
 
   //Dados do usuário que serão utilizado no decorrer do app
@@ -18,19 +22,21 @@ class UserModel extends Model {
     return user != null;
   }
 
-  //Uma forma faci
-  // litada para acessar uma classe
+  //Uma forma facilitada para acessar uma classe
   static UserModel of(BuildContext context) =>
       ScopedModel.of<UserModel>(context);
 
-  //Sobrescrevi esse método para que ao iniciar a aplicação o app carregue o usuário atual e seus respectivos dados
+  //Sobrescrevi esse método para que ao iniciar a aplicação o app carregue o
+  // usuário atual e seus respectivos dados
   @override
   void addListener(VoidCallback listener) async {
     super.addListener(listener);
     await _loadUser();
     notifyListeners();
-  } //entrar com email e senha
+  }
 
+  //entrar com email e senha
+  //Para realizar o login
   void signIn(
       {@required String email,
       @required String password,
@@ -40,23 +46,32 @@ class UserModel extends Model {
     isLoading = true;
     notifyListeners();
 
+    //Realiza tentativa de login
     _auth
         .signInWithEmailAndPassword(email: email, password: password)
         .then((user) async {
       //Guardo o user que o firebase retornou
       this.user = user.user;
+
       //Carrega user atual pro sistema
       await _loadUser();
+
+      //Caso deu tudo certo, executa função que chama um snackbar
       onSucess();
+
+      //Avisa os listeners que o processo acabou
       isLoading = false;
       notifyListeners();
     }).catchError((error) {
+      //caso deu erro, exibe snackbar vermelho
       onFail();
+      //Avisa os listeners que o processo acabou
       isLoading = false;
       notifyListeners();
     });
   }
 
+  //Para Realizar o cadastro
   void signUp(
       {@required Map<String, dynamic> userData,
       @required String password,
@@ -73,14 +88,19 @@ class UserModel extends Model {
         .then((user) async {
       //Guardo o user que o firebase retornou
       this.user = user.user;
+
       //salva os dados do usuário no firebase e localmente
       await _saveData(userData);
-      //Carrega user atual pro sistema
+
+      //Aqui mostra snackbar de sucesso
       onSucess();
+      //Avisa os listeners que o processo acabou
       isLoading = false;
       notifyListeners();
     }).catchError((error) {
+      //Mostra snackbar de erro
       onFail();
+      //Avisa os listeners que o processo acabou
       isLoading = false;
       notifyListeners();
     });
@@ -93,7 +113,7 @@ class UserModel extends Model {
     //reseta os campos locais que representam o estado de login do usuário
     user = null;
     userData = Map();
-    //atualiza as telas
+    //Avisa pro meu app que o usuário saiu
     notifyListeners();
   }
 
@@ -102,19 +122,31 @@ class UserModel extends Model {
     _auth.sendPasswordResetEmail(email: email);
   }
 
+  //Recupera as informações do usuário
   Future<Null> getUserData() async {
+    //Uso o FirebaseFirestore, para acessar os dados do cloudfirestore, passando o caminho desejado
     DocumentSnapshot docUser = await FirebaseFirestore.instance
         .collection('users')
         .doc(user.uid)
         .get();
-    print(docUser.data());
-    notifyListeners();
     userData = docUser.data();
+    notifyListeners();
+  }
+
+  //Salva-se os dados no firebase
+  Future<Null> _saveData(Map<String, dynamic> userData) async {
+    //Salvo os dados localmente
+    this.userData = userData;
+    //Salva-se os dados no firebase
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .set(userData);
+    notifyListeners();
   }
 
   //Carrega quem é o usuário logado, seja quando for feito o login ou quando o app inicializar
   Future<Null> _loadUser() async {
-    notifyListeners();
     //variável user é nula?
     if (user == null) {
       //caso seja, realiza-se a tentativa de verificação se o _auth possui algum id
@@ -128,38 +160,26 @@ class UserModel extends Model {
             .collection('users')
             .doc(user.uid)
             .get();
-        print(docUser.data());
-        notifyListeners();
         userData = docUser.data();
-        // print('Pronto ${userData['name']} carregado!');
+        notifyListeners();
       }
     }
     notifyListeners();
   }
 
-  //Salva-se os dados no firebase
-  Future<Null> _saveData(Map<String, dynamic> userData) async {
-    this.userData = userData;
-    //Salva-se os dados no firebase
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(user.uid)
-        .set(userData);
-    //Salvo os dados localmente
+  //DAQUI PRA BAIXO SÃO OS MÉTODOS QUE IRÃO MEXER COM O CRUD DAS RESERVAS
 
-    notifyListeners();
-  }
-
+  //CREATE
   //Finaliza e salva pedido de reserva no firebase, tanto na coleção do restaurante como na do usuário
-  Future<String> endOrder(Map<String, dynamic> reservationData, String userUid,
-      String restaurantUid) async {
+  Future<Null> endOrder(
+      Map<String, dynamic> reservationData, String restaurantUid) async {
     isLoading = true;
     notifyListeners();
 
     //Guarda-se os dados da reserva no firebase na coleção do usuário
     DocumentReference reservationId = await FirebaseFirestore.instance
         .collection('users')
-        .doc(userUid)
+        .doc(user.uid)
         .collection('schedule')
         .add(reservationData);
 
@@ -173,13 +193,13 @@ class UserModel extends Model {
 
     isLoading = false;
     notifyListeners();
-
-    return reservationId.id;
   }
 
+  //UPDATE
   //Finaliza a edição, salva às alterações da reserva no firebase, tanto na coleção do restaurante como na do usuário
   Future<Null> updateBooking(
       Map<String, dynamic> reservationData, String bookId) async {
+    //Avisa que app está carregando algo
     isLoading = true;
     notifyListeners();
 
@@ -199,10 +219,12 @@ class UserModel extends Model {
         .doc(bookId)
         .update(reservationData);
 
+    //avisa app que finalizou o update
     isLoading = false;
     notifyListeners();
   }
 
+  //DELETE
   Future<Null> deleteBook(String bookId, String restaurantId) async {
     isLoading = true;
     notifyListeners();
@@ -223,6 +245,7 @@ class UserModel extends Model {
         .doc(bookId)
         .delete();
 
+    //Processo finalizou
     isLoading = false;
     notifyListeners();
   }
