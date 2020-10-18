@@ -78,6 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
     //Para saber as dimensões da tela atual
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       //Passo a key que vai chamar os snakcs
       key: _scaffoldKey,
       body: SingleChildScrollView(//permite "scrollar"
@@ -86,7 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
             //todo fundo branco da tela
             Container(
               color: Colors.white,
-              height: size.height,
+              // height: size.height,
               child: ScopedModelDescendant<UserModel>(
                 builder: (context, child, model) {
                   if (model.isLoading == true) {
